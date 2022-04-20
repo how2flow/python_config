@@ -1,0 +1,67 @@
+#!/bin/bash
+set -e
+
+REPO=ppa:deadsnakes/ppa
+ENV=env
+
+msg() {
+	echo $1
+}
+
+install_python() {
+	msg "=================="
+	msg "install python${version}"
+	msg "=================="
+	sudo apt install python${version} python${version}-dev
+}
+
+set_virenv() {
+	cd ${ENV}
+	if [ -z "$(ls | grep ${venvName})" ]; then
+		msg "=================="
+		msg "create virtual env"
+		msg "=================="
+		virtualenv ${venvName} --python=${version} --system-site-package
+		echo $(ls -d */) > envlist
+	else
+		msg "already exist venv name"
+		echo $(ls -d */) > ${ENV}/envlist
+	fi
+	cd ..
+	msg "===== complite create virtualenv ====="
+}
+
+if [ $# != 2 ]; then
+	msg "Format error"
+	exit 1
+else
+	if [ $1 -lt 3 ]; then
+		version=2.7
+	else
+		version=$1
+	fi	
+	venvName=$2
+fi
+
+msg "version: ${version}"
+msg "venv Name: ${venvName}"
+
+if [ -z "$(ls /etc/apt/sources.list.d/ | grep deadsnakes)" ]; then
+	sudo add-apt-repository ${REPO}
+	sudo apt-get update
+fi
+
+if [ -x "$(command -v python${version})" ]; then
+	msg "already installed python${version}"
+else
+	install_python
+fi
+
+if [ -x "$(command -v pip*)" ] && [ -x "$(command -v virtualenv)" ]; then
+	msg "already installed pip3 & virtualenv"
+	set_virenv
+else
+	sudo apt install python3-pip
+	sudo pip3 install virtualenv
+	set_virenv
+fi
