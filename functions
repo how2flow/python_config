@@ -1,0 +1,44 @@
+#!/bin/bash
+set -e
+
+INSTALL_PATH="$( cd "$( dirname "$BASH_SOURCE" )" && pwd -P )"/env
+REPO=ppa:deadsnakes/ppa
+
+msg() {
+	echo $1
+}
+
+install_pip() {
+	sudo apt install python3-pip
+	sudo pip3 install virtualenv
+}
+
+install_python() {
+	msg "version: ${version}"
+	msg "venv Name: ${venvName}"
+	msg "=================="
+	msg "install python${version}"
+	msg "=================="
+	sudo apt install python${version} python${version}-dev
+}
+
+set_virenv() {
+	cd ${INSTALL_PATH}
+	if [ -z "$(ls | grep ${venvName})" ]; then
+		msg "=================="
+		msg "create virtual env"
+		msg "=================="
+		virtualenv ${venvName} --python=${version} --system-site-package
+		echo $(ls -d */) > envlist
+	else
+		msg "already exist venv name"
+		echo $(ls -d */) > ${INSTALL_PATH}/envlist
+	fi
+	msg "===== complite create virtualenv ====="
+	cd ${PWD}
+}
+
+update_repository() {
+	sudo add-apt-repository ${REPO}
+	sudo apt-get update
+}
