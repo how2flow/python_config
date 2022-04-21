@@ -1,40 +1,47 @@
 #!/bin/bash
 set -e
 
-INSTALL_PATH="$( cd "$( dirname "$BASH_SOURCE" )" && pwd -P )"/env
+CMD_PATH=/usr/bin/python
+INSTALL_PATH="$( cd "$( dirname "$BASH_SOURCE" )" && pwd -P )"/venv
+PRIORITY=2
 REPO=ppa:deadsnakes/ppa
-
-msg() {
-	echo $1
-}
 
 install_pip() {
 	sudo apt install python3-pip
 	sudo pip3 install virtualenv
 }
 
-install_python() {
-	msg "version: ${version}"
-	msg "venv Name: ${venvName}"
+install_python() { # install_python ${python_version}
+	msg "version: $1"
+	msg "venv Name: $1"
 	msg "=================="
-	msg "install python${version}"
+	msg "install python$1"
 	msg "=================="
-	sudo apt install python${version} python${version}-dev
+	sudo apt install python$1 python$1-dev
 }
 
-set_virenv() {
+msg() {
+	echo $1
+}
+
+python3_def() {
+	sudo update-alternatives --install ${CMD_PATH} python ${CMD_PATH}/python$1 PRIORITY
+	sudo update-alternatives --config python
+}
+
+set_virenv() { # set_virenv ${python_version} ${venv_name}
 	cd ${INSTALL_PATH}
-	if [ -z "$(ls | grep ${venvName})" ]; then
+	if [ -z "$(ls | grep $2)" ]; then
 		msg "=================="
 		msg "create virtual env"
 		msg "=================="
-		virtualenv ${venvName} --python=${version} --system-site-package
-		echo $(ls -d */) > envlist
+		virtualenv $2 --python=$1 --system-site-package
+		echo $(ls -d */) > venvlist
 	else
 		msg "already exist venv name"
-		echo $(ls -d */) > ${INSTALL_PATH}/envlist
+		echo $(ls -d */) > ${INSTALL_PATH}/venvlist
 	fi
-	msg "===== complite create virtualenv ====="
+	msg "===== complete create virtualenv ====="
 	cd ${PWD}
 }
 
