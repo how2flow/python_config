@@ -33,7 +33,7 @@ python_def() {
 
 python_remove() {
 	sudo update-alternatives --remove python ${PYTHON_CMD_PATH}$1
-	sudo update-alternatives --list
+	sudo update-alternatives --list python
 }
 
 python3_def() {
@@ -43,8 +43,8 @@ python3_def() {
 }
 
 python3_remove() {
-	sudo update-alternatives --remove python3 ${PYTHON_CMD_PATH}$1
-	sudo update-alternatives --list
+	sudo update-alternatives --remove python3 ${PYTHON3_CMD_PATH}$1
+	sudo update-alternatives --list python3
 }
 
 set_virenv() { # set_virenv ${python_version} ${venv_name}
