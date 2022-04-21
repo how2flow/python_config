@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e
 
-CMD_PATH=/usr/bin/python
 INSTALL_PATH="$( cd "$( dirname "$BASH_SOURCE" )" && pwd -P )"/venv
 PRIORITY=2
+PYTHON_CMD_PATH=/usr/bin/python
+PYTHON3_CMD_PATH=/usr/bin/python3
 REPO=ppa:deadsnakes/ppa
 
 install_pip() {
@@ -24,9 +25,26 @@ msg() {
 	echo $1
 }
 
-python3_def() {
-	sudo update-alternatives --install ${CMD_PATH} python ${CMD_PATH}/python$1 PRIORITY
+python_def() {
+	sudo update-alternatives --install ${PYTHON_CMD_PATH} python \
+		${PYTHON_CMD_PATH}$1 ${PRIORITY}
 	sudo update-alternatives --config python
+}
+
+python_remove() {
+	sudo update-alternatives --remove python ${PYTHON_CMD_PATH}$1
+	sudo update-alternatives --list
+}
+
+python3_def() {
+	sudo update-alternatives --install ${PYTHON3_CMD_PATH} python3 \
+		${PYTHON_CMD_PATH}$1 ${PRIORITY}
+	sudo update-alternatives --config python3
+}
+
+python3_remove() {
+	sudo update-alternatives --remove python3 ${PYTHON_CMD_PATH}$1
+	sudo update-alternatives --list
 }
 
 set_virenv() { # set_virenv ${python_version} ${venv_name}
