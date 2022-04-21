@@ -67,3 +67,7 @@ update_repository() {
 	sudo add-apt-repository ${REPO}
 	sudo apt-get update
 }
+
+# flag
+True=1
+False=0

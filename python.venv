@@ -6,17 +6,17 @@ DIR="$( cd "$( dirname "$BASH_SOURCE" )" && pwd -P )"
 # references
 . ${DIR}/functions
 
-
+# check format
 if [ $# != 2 ]; then
 	msg "Format error"
 	exit 1
 else
-	if [ $1 -lt 3 ]; then
-		version=2.7
-	else
-		version=$1
-	fi	
+	version=$1
 	venvName=$2
+	# parameter check: higher or lower than 3?
+	if [ ${True} -eq "$(echo "${version} < 3" | bc)" ]; then
+		version=2.7
+	fi
 fi
 
 if [ -z "$(ls /etc/apt/sources.list.d/ | grep deadsnakes)" ]; then
