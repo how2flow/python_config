@@ -18,17 +18,17 @@ else
 		version=2.7
 	fi
 fi
-
+# check apt server
 if [ -z "$(ls /etc/apt/sources.list.d/ | grep deadsnakes)" ]; then
 	update_repository
 fi
-
+# check python version in workspace
 if [ -x "$(command -v python${version})" ]; then
 	msg "already installed python${version}"
 else
 	install_python ${version}
 fi
-
+# set virtualenv
 if [ -x "$(command -v pip*)" ] && [ -x "$(command -v virtualenv)" ]; then
 	msg "already installed pip3 & virtualenv"
 	set_virenv ${version} ${venvName}
