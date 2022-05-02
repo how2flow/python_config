@@ -23,6 +23,25 @@ msg() {
 	echo $1
 }
 
+print_format_err() {
+	case $1 in
+		venv)
+		msg "===== Format error ====="
+		msg "[$ bash pythonX.venv \${python_version} \${env_name}]"
+		msg ""
+		msg "e.g."
+		msg "$ ./pythonX.venv 3.5 test"
+			;;
+		config)
+		msg "Format error"
+		msg "[$ bash pythonX.config \${python_version}]"
+		msg ""
+		msg "e.g."
+		msg "$ ./pythonX.venv 3.5"
+			;;
+		esac
+}
+
 python_def() {
 	sudo update-alternatives --install ${PYTHON_CMD_PATH} python \
 		${PYTHON_CMD_PATH}$1 ${PRIORITY}

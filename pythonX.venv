@@ -8,7 +8,7 @@ DIR="$( cd "$( dirname "$BASH_SOURCE" )" && pwd -P )"
 
 # check format
 if [ $# != 2 ]; then
-	msg "Format error"
+	print_format_err "venv"
 	exit 1
 else
 	version=$1
