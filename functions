@@ -73,11 +73,12 @@ set_virenv() { # set_virenv ${python_version} ${venv_name}
 		msg "===== create virtual env ====="
 		virtualenv $2 --python=$1 --system-site-package
 		echo $(ls -d */) > venvlist
+		msg "===== complete create virtualenv ====="
 	else
-		msg "already exist venv name"
+		msg "===== already exist venv name ====="
+		msg "===== stopped creating venv ====="
 		echo $(ls -d */) > ${INSTALL_PATH}/venvlist
 	fi
-	msg "===== complete create virtualenv ====="
 	cd ${PWD}
 }
 
